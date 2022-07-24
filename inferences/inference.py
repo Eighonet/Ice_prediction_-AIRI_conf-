@@ -5,7 +5,11 @@ import numpy as np
 
 import torch
 
-def get_files(folders, dataset: str) -> list:
+def get_files(folders: list) -> list:
+    """
+       Get .pt filenames with SIC+GFS data.
+         *  folders -- list of paths to train/val/test folders.
+    """
     train_files, val_files, test_files = sorted([file for file in listdir(folders[0])])[1346:],\
                                          sorted([file for file in listdir(folders[1])]),\
                                          sorted([file for file in listdir(folders[2])])
@@ -14,6 +18,10 @@ def get_files(folders, dataset: str) -> list:
     return files
 
 def get_coords(grid) -> tuple:
+    """
+       Get longitude & latitude of selected dataset patches.
+         *  grid -- .pt file with grid & aux data.
+    """
     lons, lats = grid["lons"].reshape(-1).tolist(), grid["lats"].reshape(-1).tolist()
     return {"lons":lons, "lats":lats}
 
@@ -21,6 +29,10 @@ def get_model(model_name: str, device: str = "cpu"):
     return torch.load(model_name).to(device)
 
 def unet_inference(model, folders: list, files: list, date: str, grid, device: str = "cpu") -> dict():
+    """
+       Predict future conditions of SIC regarding the date.
+         *  date -- reference data.
+    """
     def round_tensor(data: torch.Tensor) -> torch.Tensor:
         output_round = torch.round(data)
         output_round[output_round <= 0] = 0
@@ -50,8 +62,12 @@ def unet_inference(model, folders: list, files: list, date: str, grid, device: s
     return result
 
 def main_inference(dataset: str, date: str, model_name: str):
+    """
+       Main wrapper for inferences.
+         *  date -- reference data.
+    """
     folder_train, folder_val, folder_test = dataset + '/train/maps/', dataset + '/valid/maps/', dataset + '/test/maps/'
-    files = get_files([folder_train, folder_val, folder_test], dataset)
+    files = get_files([folder_train, folder_val, folder_test])
     grid = torch.load(dataset + "/train/grid.pt")
     
     model = get_model(model_name)
