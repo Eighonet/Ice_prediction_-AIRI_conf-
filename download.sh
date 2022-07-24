@@ -1,0 +1,1 @@
+wget https://sc.link/nXMY
