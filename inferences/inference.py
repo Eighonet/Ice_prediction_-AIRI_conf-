@@ -31,7 +31,7 @@ def get_model(model_name: str, device: str = "cpu"):
 def unet_inference(model, folders: list, files: list, date: str, grid, device: str = "cpu") -> dict():
     """
        Predict future conditions of SIC regarding the date.
-         *  date -- reference data.
+         *  date -- reference date.
     """
     def round_tensor(data: torch.Tensor) -> torch.Tensor:
         output_round = torch.round(data)
@@ -64,7 +64,7 @@ def unet_inference(model, folders: list, files: list, date: str, grid, device: s
 def main_inference(dataset: str, date: str, model_name: str):
     """
        Main wrapper for inferences.
-         *  date -- reference data.
+         *  date -- reference date.
     """
     folder_train, folder_val, folder_test = dataset + '/train/maps/', dataset + '/valid/maps/', dataset + '/test/maps/'
     files = get_files([folder_train, folder_val, folder_test])
