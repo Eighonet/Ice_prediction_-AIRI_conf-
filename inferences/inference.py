@@ -70,11 +70,11 @@ def save_results(inference_output:dict, dataset:str, date:str, model_name:str) -
        Save predictions as a .json file.
     """
     try:
-        os.mkdir('models_output/')
+        os.mkdir('inferences/models_output/')
     except:
         pass
     
-    with open('models_output/' + dataset + "_" + date + "_" + model_name +'.json', 'w') as f:
+    with open('inferences/models_output/' + dataset + "_" + date + "_" + model_name +'.json', 'w') as f:
         json.dump(inference_output, f)
 
 def main_inference(dataset: str, date: str, model_name: str) -> dict:
@@ -82,19 +82,19 @@ def main_inference(dataset: str, date: str, model_name: str) -> dict:
        Main wrapper for inferences.
          *  date -- reference data.
     """
-    logged_preds = [file for file in listdir('models_output/')]
+    logged_preds = [file for file in listdir('inferences/models_output/')]
     
     if dataset + "_" + date + "_" + model_name +'.json' in logged_preds:
         
-        with open('models_output/' + dataset + "_" + date + "_" + model_name +'.json', 'r') as f:
+        with open('inferences/models_output/' + dataset + "_" + date + "_" + model_name +'.json', 'r') as f:
             return json.load(f)
     else:
+        
+        model = get_model(model_name)
         
         folder_train, folder_val, folder_test = dataset + '/train/maps/', dataset + '/valid/maps/', dataset + '/test/maps/'
         files = get_files([folder_train, folder_val, folder_test])
         grid = torch.load(dataset + "/train/grid.pt")
-
-        model = get_model(model_name)
 
         pred_sic = unet_inference(model, [folder_train, folder_val, folder_test], files, date, grid)
         coords = get_coords(grid)
