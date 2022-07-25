@@ -82,16 +82,24 @@ def main_inference(dataset: str, date: str, model_name: str) -> dict:
        Main wrapper for inferences.
          *  date -- reference data.
     """
-    folder_train, folder_val, folder_test = dataset + '/train/maps/', dataset + '/valid/maps/', dataset + '/test/maps/'
-    files = get_files([folder_train, folder_val, folder_test])
-    grid = torch.load(dataset + "/train/grid.pt")
+    logged_preds = [file for file in listdir('models_output/')]
     
-    model = get_model(model_name)
-    
-    pred_sic = unet_inference(model, [folder_train, folder_val, folder_test], files, date, grid)
-    coords = get_coords(grid)
-    
-    output = {"coords":coords, "magn":pred_sic}
-    save_results(output, dataset, date, model_name)
-    
-    return output
+    if dataset + "_" + date + "_" + model_name +'.json' in logged_preds:
+        
+        with open('models_output/' + dataset + "_" + date + "_" + model_name +'.json', 'r') as f:
+            return json.load(f)
+    else:
+        
+        folder_train, folder_val, folder_test = dataset + '/train/maps/', dataset + '/valid/maps/', dataset + '/test/maps/'
+        files = get_files([folder_train, folder_val, folder_test])
+        grid = torch.load(dataset + "/train/grid.pt")
+
+        model = get_model(model_name)
+
+        pred_sic = unet_inference(model, [folder_train, folder_val, folder_test], files, date, grid)
+        coords = get_coords(grid)
+
+        output = {"coords":coords, "magn":pred_sic}
+        save_results(output, dataset, date, model_name)
+
+        return output
