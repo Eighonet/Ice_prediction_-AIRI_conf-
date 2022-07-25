@@ -18,7 +18,7 @@ app = Flask(__name__)
 def report():
     return render_template('report.html',
                            area = ['barents', 'laptev', 'labrador'],
-                           model = ['model1', 'model2', 'model3'],
+                           model = ['UNet', 'ResNet', 'PredRNN', 'ConvLSTM'],
                            scenario = 1,
                            barents_graphJSON= show_map()
                            )
