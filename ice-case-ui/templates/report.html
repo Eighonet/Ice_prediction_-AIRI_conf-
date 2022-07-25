@@ -1,0 +1,185 @@
+<!doctype html>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<html lang="en">
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>ice-case</title>
+    <style>
+        body {
+        text-align: center;
+        }
+        h1 {
+        text-align: center;
+        padding: 0.8em;
+        }
+        h2 {
+        text-align: center;
+        padding: 0.5em;
+        }
+        h3 {
+        text-align: center;
+        }
+        h3 {
+        text-align: center;
+        padding: 1em;
+        }
+        .description {
+        font-size:20px;
+        margin-left: 110px;
+        margin-right: 110px;
+        background: #d7d7d7;
+        padding: 10px;
+        }
+        form {
+        height: 200px;
+        width: 35%;
+        display: inline-block;
+        }
+        .data_picker {
+        height: 50px;
+        width: 100%;
+        padding: 1em;
+        }
+
+        .btn-toolbar {
+            margin: 0 auto;
+            text-align: center;
+            display: inline-block;
+        }
+        .hr-horizontal-gradient {
+            margin: 20px 0;
+            padding: 0;
+            height: 50px;
+            size: 20px;
+            border: 10px;
+            background: linear-gradient(45deg, #333, #ddd);
+}
+    </style>
+
+    <div class="container">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script>
+        d = {{ barents_graphJSON | safe }};
+        //d.config={staticPlot: true};
+        Plotly.newPlot('barents_map', d, {});
+
+
+        </script>
+    </div>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="https://github.com/Eighonet/Ice_prediction_-AIRI_conf-"><b>Github</b></a>
+      <a class="nav-item nav-link" href="https://docs.google.com/presentation/d/1dXxNvcGM8S0zjiDTFh5aE1ePyA-MFUZ5Nz7BcdyxPYc/edit?usp=sharing"><b>Presentation</b></a>
+      <a class="nav-item nav-link" href="https://www.overleaf.com/9468263891sqnrmypstppp"><b>Report</b></a>
+    </div>
+  </div>
+</nav>
+
+<div>
+    <h1>ICE CASE FORECASTING</h1>
+</div>
+<div>
+    <h2>Project description</h2>
+    <center class="description" ;> ML-based methods are computationally much more lightweight than classical numerical
+        models and may be efficient in sea-ice forecasting. We will focus on daily operational forecasts and exploit
+        JAXA satellite data and GFS weather forecasts for the last 7 years. Using this data, we will investigate the
+        performance of contemporary ML methods, first developed for video prediction, and train them to produce sea ice
+        forecasts for up to the next 10 days. We will show that deep learning models can outperform simple baselines by
+        a significant margin, improve their quality by using additional weather data, and test their generalization
+        abilities on the Barents Sea, the Labrador Sea, and the Laptev Sea regions.
+
+        You can start with U-Net architecture as a benchmark and test it in different settings. After that, try any more
+        complex architecture (e.g., PredRNN, CrevNet, E3D-LSTM, or find what you think suits best) and compare the
+        results.
+
+        General project goals:
+        Reproduce metrics with U-Net and beat them with more complex neural architectures.
+    </center>
+</div>
+
+<div class="container">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        d = {{ barents_graphJSON | safe }};
+        //d.config={staticPlot: true};
+        Plotly.newPlot('barents_map', d, {});
+
+
+    </script>
+</div>
+
+<div>
+    <h2> Выбор параметров наблюдений </h2>
+    <form method="POST" , id="barents_map_input">
+        <input class="form-control" list="area_select" id="area_id" placeholder="Область наблюдений">
+        <datalist id="area_select">
+            {% for el in area %}
+            <option value="{{ el }}">{{ el }}</option>
+            {% endfor %}
+        </datalist>
+        <input class="form-control" list="model_select" id="model_id" placeholder="Модель">
+        <datalist id="model_select">
+            {% for el in model %}
+            <option value="{{ el }}">{{ el }}</option>
+            {% endfor %}
+        </datalist>
+        <p></p>
+        <h6> Выбор даты (доступный диапазон: с 25.10.2020 по 25.10.2021) </h6>
+        <input class="data_picker" type="date" id="dat_id" data-date-inline-picker="true"/>
+        <!--      <input type="datetime-local" id="Test_DatetimeLocal">-->
+        <p></p>
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button type="button" class="btn btn-primary" onclick="show_map()">Показать результаты</button>
+            </div>
+            <div class="btn-group me-2" role="group" aria-label="Second group">
+                <button type="button" class="btn btn-primary" onclick="reset_show_map()">Сбросить параметры
+                </button>
+            </div>
+
+        </div>
+    </form>
+    <div id="barents_map" class="chart"></div>
+</div>
+
+<script>
+    async function show_map() {
+<!--        let area = document.getElementById('area_id').value;-->
+        let model = document.getElementById('model_id').value;
+        let date = document.getElementById('dat_id').value;
+        let response = await fetch("/show_map?model=" + model + "&date=" + date);
+        if (response.ok) {
+            let chartJson = await response.json();
+            Plotly.newPlot('barents_map_input', chartJson, {});
+        } else {
+            alert("HTTP-Error: " + response.status + "on show_map");
+        }
+    }
+</script>
+
+<script>
+    async function reset_show_map() {
+        let f = document.getElementById('barents_map_input');
+        f.reset();
+    }
+</script>
+
+<div>
+    <h2> Отображение ошибок моделей </h2>
+    <h2> TO DO </h2>
+</div>
+</body>
