@@ -9,9 +9,14 @@ import plotly.express as px
 import os
 import uuid
 import datetime
-from charts import barents_map
+from flask_cors import CORS
+
+from charts import barents_map, show_metrics
+
+
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/')
@@ -20,12 +25,17 @@ def report():
                            area = ['barents', 'laptev', 'labrador'],
                            model = ['UNet', 'ResNet', 'PredRNN', 'ConvLSTM'],
                            scenario = 1,
-                           barents_graphJSON= show_map()
+                           barents_graphJSON= show_map(),
+                           metrics_graphJSON= show_hist()
                            )
 
 @app.route('/show_map', methods=['POST', 'GET'])
 def show_map():
     return barents_map(request.args.get('model'), request.args.get('date'))
+
+@app.route('/show_hist', methods=['POST', 'GET'])
+def show_hist():
+    return show_metrics()
 
 # @app.route('/barents_map_')
 # def barents_map():

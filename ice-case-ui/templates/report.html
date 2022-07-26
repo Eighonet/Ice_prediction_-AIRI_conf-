@@ -21,7 +21,7 @@
         }
         h2 {
         text-align: center;
-        padding: 0.5em;
+        padding: 0.8em;
         }
         h3 {
         text-align: center;
@@ -41,7 +41,7 @@
         height: 250px;
         width: 35%;
         padding: 12px 20px;
-        margin: 8px 90px 10px;
+        margin: 8px 90px 30px;
         box-sizing: border-box;
 <!--        display: inline-block;-->
         }
@@ -114,6 +114,23 @@
     </center>
 </div>
 
+<div>
+    <h2> Отображение ошибок моделей </h2>
+
+    <script>
+        d = {{ metrics_graphJSON | safe }};
+        //d.config={staticPlot: true};
+        Plotly.newPlot('show_metrics', d, {});
+    </script>
+
+    <div>
+    <h1> MAE </h1>
+    <form method="POST", id="show_metrics">
+        <div class="btn-toolbar" text-align : center role="toolbar" aria-label="Toolbar with button groups"></div>
+    </form>
+    </div>
+</div>
+
 <div class="container">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
@@ -126,6 +143,7 @@
 </div>
 
 <div>
+    <p></p>
     <h2> Выбор параметров наблюдений </h2>
     <form method="POST" , id="barents_map_input">
         <input class="form-control" list="area_select" id="area_id" placeholder="Область наблюдений">
@@ -141,7 +159,7 @@
             {% endfor %}
         </datalist>
         <p></p>
-        <h6> Выбор даты (доступный диапазон: с 25.10.2020 по 25.10.2021) </h6>
+        <h6> Выбор даты </h6>
         <input class="data_picker" type="date" id="dat_id" data-date-inline-picker="true"/>
         <!--      <input type="datetime-local" id="Test_DatetimeLocal">-->
         <p></p>
@@ -182,7 +200,17 @@
 </script>
 
 <div>
-    <h2> Отображение ошибок моделей </h2>
-    <h2> TO DO </h2>
+
+    <script>
+        d = {{ metrics_graphJSON | safe }};
+        //d.config={staticPlot: true};
+        Plotly.newPlot('show_metrics', d, {});
+    </script>
+
+    <div>
+    <form method="POST", id="show_hist">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups"></div>
+    </form>
+</div>
 </div>
 </body>
