@@ -16,7 +16,6 @@ from charts import barents_map, show_metrics
 
 
 app = Flask(__name__)
-CORS(app)
 
 
 @app.route('/')
